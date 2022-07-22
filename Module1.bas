@@ -184,7 +184,44 @@ Sub ShiftAll()
     
 End Sub
 
-Sub RemoveShiftSelection()
+Sub DebugDelete()
+    Selection.Delete
+End Sub
+
+Sub DeleteSelectedExpiryDates()
+    Dim sel As Range
+    Dim cs As Range
+    Dim valid As Boolean
+    Dim selCoords As Integer
+    
+    valid = True
+    Set sel = Selection
+    
+    For Each cs In sel.Cells
+        If cs.Row = 1 Or cs.Column <= 2 Or cs.Column >= 8 Then
+            valid = False
+        End If
+        selCoords = cs.Row
+    Next
+    
+    If valid Then
+        Application.ScreenUpdating = False
+        Call RemoveFormat
+        Call DeColourAll
+    
+        sel.Delete Shift:=xlToLeft
+        
+        Call ReapplyFormat
+        Call ColourAll
+        
+        Cells(selCoords, 3).Select
+        Application.ScreenUpdating = True
+    Else
+        MsgBox "INVALID SELECTION: The selection contains cells that are not expiry dates"
+    End If
+End Sub
+
+Sub RemoveShiftSelection() 'depracated function
     Dim selRange As Range
     Set selRange = Selection
     
@@ -195,8 +232,6 @@ Sub RemoveShiftSelection()
             Call DeColourAll
     
             selRange.Select
-            Selection.ClearContents
-            Selection.SpecialCells(xlCellTypeBlanks).Select
             Selection.Delete Shift:=xlToLeft
     
             Call ReapplyFormat
