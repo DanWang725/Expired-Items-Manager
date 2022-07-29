@@ -6,6 +6,7 @@ Sub MakeDates()
     Dim year As String
     Dim lCol As Integer
     Dim final As String
+    Call ShowAll
     Application.ScreenUpdating = False
     lCol = Cells(Rows.Count, 1).End(xlUp).Row
     
